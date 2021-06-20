@@ -1,0 +1,204 @@
+---
+title: "Homework 4"
+output: html_notebook
+---
+6210422036 Tanat Iempreedee
+
+```{r echo=TRUE}
+library(ggplot2)
+library(fpp2)
+library(forecast)
+
+data <- read.table("c3p11.csv", header=TRUE, sep = ',', fileEncoding = 'UTF-8-BOM')
+data
+```
+## Creating Time-series
+```{r echo=TRUE}
+y <- ts(data$Sales, frequency=12, start=c(2002,1))
+y
+```
+
+# A.
+
+Plot the data to examine the possible existence of trend and seasonality in the data.
+
+```{r}
+autoplot(y) + ylab('Sales ($M)') + ggtitle('Full Service Retail Restaurant Sales ($M)')
+```
+```{r}
+ggseasonplot(y, year.labels = TRUE, year.labels.left = TRUE) +
+  ylab("Sales ($M)") +
+  ggtitle("Seasonal plot")
+```
+- **Trend:** Yes, seems like linear.  
+- **Seasonal:** Yes, A or M? We'll find out.  
+
+
+## B.
+Forecast using the 8 models below  
+1. Simple exponential smoothing  
+2. Holt's linear trend  
+3. Damped trend  
+4. Holt-Winters' additive seasonal  
+5. Holt-Winters' multiplicative seasonl
+6. Winters' additive seasonal with damped trend  
+7. ETS (ZZZ)  
+8. ETS (ZZZ, Damped=FALSE)  
+
+### Train/Test split
+```{r echo=TRUE}
+ytrain <- window(y, start=c(2002,1), end=c(2013,12)) # train
+ytest <- window(y, start=c(2014,1), end=c(2015,12)) # test 
+autoplot(y) +
+  autolayer(ytrain, series="Training") +
+  autolayer(ytest, series="Test") +
+  ylab("Sales ($M)") + ggtitle('Train/Test')
+```
+### 1) SES
+```{r echo=TRUE}
+ySES <- ses(ytrain, h=24)
+accuracy(ySES, ytest)
+```
+
+```{r}
+autoplot(ySES) + 
+  autolayer(fitted(ySES), series="Fitted") +
+  autolayer(ytest, series='Test') +
+  ylab("Sales ($M)")
+```
+### 2) Holt's
+
+```{r}
+yHolt <- holt(ytrain, h=24)
+accuracy(yHolt, ytest)
+```
+```{r}
+autoplot(yHolt) + 
+  autolayer(fitted(yHolt), series="Fitted") +
+  autolayer(ytest, series='Test') +
+  ylab("Sales ($M)")
+```
+### 3) Damped Holt's
+
+```{r}
+yHoltDamp <- holt(ytrain, h=24, damped=TRUE)
+accuracy(yHoltDamp, ytest)
+```
+```{r}
+autoplot(yHoltDamp) +
+  autolayer(fitted(yHoltDamp), series='Fitted') +
+  autolayer(ytest, series='Test') +
+  ylab('Sales ($M)')
+```
+
+### 4) Holt-Winters' additive seasonal
+
+```{r}
+yHWA <- hw(ytrain, h=24, seasonal='additive')
+accuracy(yHWA, ytest)
+```
+```{r}
+autoplot(yHWA) +
+  autolayer(fitted(yHWA), series='Fitted') +
+  autolayer(ytest, series='Test') +
+  ylab('Sales ($M)')
+```
+
+### 5) Holt-Winters' multiplicative seasonal
+
+```{r}
+yHWM <- hw(ytrain, h=24, seasonal='multiplicative')
+accuracy(yHWM, ytest)
+```
+```{r}
+autoplot(yHWM) +
+  autolayer(fitted(yHWM), series='Fitted') +
+  autolayer(ytest, series='Test') +
+  ylab('Sales ($M)')
+```
+### 6) Damped Holt-Winters' additive
+```{r}
+yHWADamp <- hw(ytrain, h=24, damped=TRUE)
+accuracy(yHWADamp,ytest)
+```
+```{r}
+autoplot(yHWADamp) + 
+  autolayer(fitted(yHWADamp), series='Fitted') +
+  autolayer(ytest, series='Test') +
+  ylab('Sales ($M)')
+```
+### 6) ETS (ZZZ)
+```{r}
+model1 <- ets(ytrain, "ZZZ")
+summary(model1)
+```
+```{r}
+autoplot(model1)
+```
+```{r}
+checkresiduals(model1)
+```
+
+```{r}
+m1pred <- forecast(model1, h=24)
+accuracy(m1pred, ytest)
+```
+
+```{r}
+autoplot(m1pred) +
+  autolayer(fitted(m1pred), series='Fitted') + 
+  autolayer(ytest, series='Test') +
+  ylab('Sales ($M)')
+```
+### 7) ETS (ZZZ, Damped=FALSE)
+
+```{r}
+model2 <- ets(ytrain, "ZZZ", damped=FALSE)
+summary(model2)
+```
+
+```{r}
+autoplot(model2)
+```
+
+```{r}
+checkresiduals(model2)
+```
+
+```{r}
+m2pred <- forecast(model2, h=24)
+accuracy(m2pred, ytest)
+```
+```{r}
+autoplot(m2pred) +
+  autolayer(fitted(m2pred), series='Fitted') + 
+  autolayer(ytest, series='Test') +
+  ylab('Sales ($M)')
+```
+
+## c. Model Comparison
+
+Comparing MAPE of Train & Test for each model.
+```{r}
+metrics <- rbind(accuracy(ySES,ytest)[9:10],
+                accuracy(yHolt,ytest)[9:10],
+                accuracy(yHWA,ytest)[9:10],
+                accuracy(yHoltDamp,ytest)[9:10],
+                accuracy(yHWADamp,ytest)[9:10],
+                accuracy(m1pred,ytest)[9:10],
+                accuracy(m2pred,ytest)[9:10],
+                accuracy(yHWM,ytest)[9:10])
+metrics <- data.frame(metrics)
+colnames(metrics) <- c("Train","Test")
+rownames(metrics) <- c("SES","Holt","HW additive","Damped Holt","Damped HW additive", "ETS (M,Ad,M)","ETS (M,A,M)","HW multiplicative")
+metrics[order(metrics$Test),]
+```
+
+### Summary
+- **ETS(M,A,M)** as a result from ZZZ and Damped=FALSE parameters gives the lowest MAPE on Test set -> **[SELECTED]**  
+- ETS(M,Ad,M) is from using ZZZ option. Even though its AICc = 2302.743 is lower compared to 2308.233 from ETS(M,A,M), its MAPE loses against many competitors here.  
+- Trend seems to be linear as the Damped models yield lower performance compared to other linear trend models.
+- Seasonal seems to align with multiplicative more by looking at the top 2 scorers.  
+
+
+

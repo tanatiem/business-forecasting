@@ -1,0 +1,112 @@
+---
+title: "Homework 02"
+output:
+  html_notebook: default
+  pdf_document: default
+---
+
+## 1. Chapter 1 Problem 8 (c1p8): Use R
+
+```{r echo=TRUE}
+library(xlsx)
+
+data <- read.xlsx('c1p8_2.xlsx','Sheet1', header=TRUE)
+
+y <- ts(data$RetailStoreSales, frequency=1)
+y
+```
+
+```{r echo=TRUE}
+autoplot(y) + 
+  ggtitle("Retail Store Sales") +
+  xlab("Year") +
+  ylab("Amount")
+```
+
+```{r echo=TRUE, warning=FALSE}
+yfitN <- naive(y, h=1)
+
+ypred <- ts(c(yfitN$fitted, yfitN$mean))
+
+autoplot(y, series='Actual') +
+  autolayer(ypred, series="Naive") + 
+  xlab("Year") + ylab("Amount") +
+  ggtitle("Naive Forecasts for Retail Store Sales")
+```
+```{r echo=TRUE}
+accuracy(yfitN)
+```
+## 2. Integrative Case: The Gap KW pp.81-83
+
+```{r echo=TRUE}
+data <- read.xlsx('C2 Gap Sales Data_2.xlsx','Quarterly Gap Sales Data', header=TRUE)
+data
+```
+```{r echo=TRUE}
+y <- ts(data$GapSales, frequency=4, start=c(2006, 01))
+y
+```
+
+#### 1. Calculate the mean and standard deviation for the set of quarterly data in 2016. Also compute coefficient of variation
+
+```{r echo=TRUE}
+y2016 <- tail(y, 4)
+y2016
+```
+
+```{r echo=TRUE}
+paste('mean:',mean(y2016))
+paste('sd:  ',sd(y2016))
+paste('cv:  ',sd(y2016)/mean(y))
+```
+#### 2. Plot these data in a time-series plot.
+
+```{r echo=TRUE}
+autoplot(y) + 
+  ggtitle("Gap Sales ($M)") +
+  xlab("Quarter") +
+  ylab("Amount ($M)")
+```
+#### 3. Using data for 2006Q1 through 2016Q4, construct the correlogram for lags of 1 through 12
+```{r echo=TRUE}
+ggAcf(y, 12)
+
+```
+Seasonal = Yes  
+Trend = Not sure
+
+```{r echo=TRUE}
+ggseasonplot(y, year.labels = TRUE, year.labels.left = TRUE) +
+  ylab("Millions") +
+  ggtitle("Seasonal plot")
+
+```
+#### 4. What forecasting methods might you suggest if you were to forecast the Gap's quarterly sales?
+
+##### Train/Test Split
+```{r echo=TRUE}
+ytrain <- window(y, start=c(2006,1), end=c(2014,4))
+ytest <- window(y, start=c(2015,1), end=c(2016,4))
+autoplot(y) +
+  autolayer(ytrain, series="Training") +
+  autolayer(ytest, series="Test")
+```
+```{r echo=TRUE}
+yfitSN <- snaive(ytrain, h=8)
+accuracy(yfitSN, ytest)
+yfitETS <- forecast(ytrain, h=8)
+accuracy(yfitETS, ytest)
+yfitHW <- hw(ytrain, h=8)
+accuracy(yfitHW, ytest)
+```
+
+```{r echo=TRUE}
+autoplot(y) +
+  autolayer(yfitSN, series="Seasonal Naive", PI=FALSE) + 
+  autolayer(yfitETS, series="ETS", PI=FALSE) +
+  autolayer(yfitHW, series="Holt-Winters", PI=FALSE) +
+  xlab("Year") + ylab("Sales Amount ($M)") +
+  ggtitle("Forecasts for Gap Sales") +
+  guides(colour=guide_legend(title="Forecast"))
+```
+
