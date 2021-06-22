@@ -1,0 +1,57 @@
+---
+title: "Homework 5"
+output: html_notebook
+---
+6210422036: Tanat Iempreedee  
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Dataset
+```{r init}
+library(ggplot2)
+library(fpp2)
+library(forecast)
+library(seasonal)
+
+src <- read.table('c6p14.csv', sep=',', header=TRUE)
+data <- ts(src$CS, frequency=4, start=c(1996,1))
+data
+```
+### Test set
+```{r}
+ytest <- ts(c(301.1,336.7,341.8,293.5), frequency=4, start=(c(2017,1)))
+ytest
+```
+```{r}
+ylabel <- 'Car sales'
+title <- 'Car sales in the upper mid-west'
+autoplot(data, series='Data') +
+  autolayer(ytest, series='Test') +
+  ylab(ylabel) + ggtitle(title)
+```
+## STL Decomposition
+```{r}
+mSTL <- mstl(data)
+autoplot(mSTL)
+```
+### Seasonally Adjusted
+```{r}
+sa <- seasadj(mSTL)
+autoplot(data, series="Data") +
+  autolayer(sa, series="Seasonally Adjusted") 
+```
+
+### Getting the seasonal indices from the latest year
+```{r}
+siLast <- tail(seasonal(mSTL),n=4)
+siLast
+```
+### 1. Naive
+
+```{r}
+mSTL1 <- naive(seasadj(mSTL),h=4)$mean + siLast
+mSTL1
+```
+
