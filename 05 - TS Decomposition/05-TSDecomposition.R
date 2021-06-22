@@ -84,8 +84,7 @@ mSTL4
 # SEATS decomposition 
 ################################################
 
-setwd("C:/Users/Admin/Google Drive/Mai/Teaching/Courses/LM7204-BizForecasting/Excel-R")
-d <- read.table("c6t2.txt", header=TRUE)  # private housing starts
+d <- read.table("c6t2.csv", sep=',', header=TRUE)  # private housing starts
 head(d)
 
 dtsPHS <- ts(d$PHS, frequency = 4, start=c(1959, 1))
