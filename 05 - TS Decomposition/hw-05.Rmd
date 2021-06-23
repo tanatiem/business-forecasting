@@ -43,15 +43,105 @@ autoplot(data, series="Data") +
   autolayer(sa, series="Seasonally Adjusted") 
 ```
 
-### Getting the seasonal indices from the latest year
+#### Getting the seasonal indices from the latest year
+
 ```{r}
 siLast <- tail(seasonal(mSTL),n=4)
 siLast
 ```
-### 1. Naive
-
+Since the SI is bound to the historical time period. In order to use it to re-seasonalize the predicted values, we have to make it a plain numerical vector, or else getting an error.
 ```{r}
-mSTL1 <- naive(seasadj(mSTL),h=4)$mean + siLast
-mSTL1
+siLast <- as.numeric(siLast)
+siLast
 ```
 
+## 1) Naive
+
+```{r naive}
+# forecast using Naive
+saNaive <- naive(sa,h=4)
+autoplot(saNaive)
+```
+#### Naive - actual forecast
+```{r}
+ypredNaive <- saNaive$mean + siLast
+ypredNaive
+```
+```{r}
+autoplot(data, series='Data') +
+  autolayer(ytest, series='Test') +
+  autolayer(saNaive$fitted + seasonal(mSTL), series='Fitted') + 
+  autolayer(ypredNaive, series='Forecast') +
+  ylab(ylabel) + ggtitle('STL + Naive')
+```
+
+```{r}
+accuracy(ypredNaive, ytest)
+```
+### 2) Holt
+
+```{r holt}
+saHolt <- holt(sa, h=4)
+autoplot(saHolt)
+```
+#### Holt - actual forecast
+```{r}
+ypredHolt <- saHolt$mean + siLast
+ypredHolt
+```
+
+
+```{r}
+autoplot(data, series='Data') +
+  autolayer(ytest, series='Test') + 
+  autolayer(saHolt$fitted + seasonal(mSTL), series='Fitted') +
+  autolayer(ypredHolt, series='Forecast') +
+  ylab(ylabel) + ggtitle('STL + Holt')
+```
+```{r}
+accuracy(ypredHolt, ytest)
+```
+## 3) ETS (Auto)
+```{r ets}
+ets_model1 <- ets(sa)
+summary(ets_model1)
+```
+```{r}
+checkresiduals(ets_model1)
+```
+```{r}
+ypredETS1 <- forecast(ets_model1, h=4)$mean + siLast
+ypredETS1
+```
+```{r}
+autoplot(data, series='Data') +
+  autolayer(ytest, series='Test') +
+  autolayer(fitted(ets_model1) + seasonal(mSTL), series='Fitted') +
+  autolayer(ypredETS1, series='Forecast') +
+  ylab(ylabel) + ggtitle('STL + ETS (A,N,N)')
+```
+```{r}
+accuracy(ypredETS1, ytest)
+```
+## 4) ETS (M,A,N)
+```{r ets2}
+ets_model2 <- ets(sa, 'ZAN')
+summary(ets_model2)
+```
+```{r}
+checkresiduals(ets_model2)
+```
+```{r}
+ypredETS2 <- forecast(ets_model2, h=4)$mean + siLast
+ypredETS2
+```
+```{r}
+autoplot(data, series='Data') +
+  autolayer(ytest, series='Test') +
+  autolayer(fitted(ets_model2) + seasonal(mSTL), series='Fitted') +
+  autolayer(ypredETS2, series='Forecast') +
+  ylab(ylabel) + ggtitle('STL + ETS (M,A,N)')
+```
+```{r}
+accuracy(ypredETS2, ytest)
+```

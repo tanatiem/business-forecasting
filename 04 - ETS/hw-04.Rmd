@@ -4,6 +4,10 @@ output: html_notebook
 ---
 6210422036 Tanat Iempreedee
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
 ```{r echo=TRUE}
 library(ggplot2)
 library(fpp2)
