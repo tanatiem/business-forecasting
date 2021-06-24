@@ -1,0 +1,36 @@
+---
+title: "Homework 6"
+output: html_notebook
+---
+6210422036: Tanat Iempreedee  
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(ggplot2)
+library(fpp2)
+library(forecast)
+
+data <- read.table('c7p9.csv', sep=',', header=TRUE)
+dts <- ts(data$Mean.Usage, frequency=12, start=c(1993,1))
+dts
+```
+```{r}
+ylabel <- 'Mean hourly usage (Megawatts)'
+title <- 'Electricity usage in NYC'
+autoplot(dts) +
+  ylab(ylabel) + ggtitle(title)
+```
+
+
+```{r}
+model <- auto.arima(dts)
+summary(model)
+```
+```{r}
+checkresiduals(model)
+```
+

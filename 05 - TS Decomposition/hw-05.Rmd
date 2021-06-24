@@ -109,7 +109,7 @@ summary(ets_model1)
 ```{r}
 checkresiduals(ets_model1)
 ```
-```{r}
+```{r echo=TRUE}
 ypredETS1 <- forecast(ets_model1, h=4)$mean + siLast
 ypredETS1
 ```
