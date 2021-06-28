@@ -11,6 +11,9 @@ help("qnorm")
 qnorm(0.9, 0, 5.724)
 pnorm(0)
 pnorm(108, mean=100, sd=10)
+# random normal
+rnorm(10,100,10)
+
 
 # assignment
 x <- 2
@@ -82,6 +85,8 @@ autoplot(yfitSN, PI=FALSE)
 autoplot(yfitSN, PI=TRUE)
 
 yfitETS <- forecast(ytrain, h=18)
+autoplot(yfitETS, PI=FALSE)
+autoplot(yfitETS, PI=TRUE)
 
 summary(yfitETS)
 
@@ -153,3 +158,23 @@ checkresiduals(yhat2017)
 res <- residuals(yhat2017)
 mean(res)
 cor(res[1:83],res[2:84])
+
+
+# updated example
+# service level = 0.95
+yhat2017 <- forecast(y, h=12)
+effDemandMean <- sum(yhat2017$mean[2:5])
+accuracy(yhat2017)
+errorMesure <- accuracy(yhat2017)
+RMSE <- errorMesure[2]
+
+ReviewPeiod <- 3
+LeadTime <- 1
+protectionTime <- ReviewPeiod + LeadTime
+effDemandStd <- RMSE*sqrt(protectionTime)
+CSL <- 0.90
+SS <- qnorm(CSL, 0, effDemandStd )
+OUTL1 <- ceiling(effDemandMean + SS) 
+OUTL1
+OUTL2 <- ceiling(qnorm(CSL, effDemandMean, effDemandStd))
+OUTL2
