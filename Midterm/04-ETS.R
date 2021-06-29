@@ -6,7 +6,7 @@ library(fpp2)
 library(forecast)
 
 setwd("C:/Users/Admin/Google Drive/Mai/Teaching/Courses/LM7204-BizForecasting/Excel-R")
-d <- read.table("c3GapSalesData.txt", header=TRUE)
+d <- read.table("04/c3GapSalesData.txt", header=TRUE)
 head(d)
 head(d$GapSales)
 dts <- ts(data=d$GapSales, frequency = 4, start=c(2006,2))
