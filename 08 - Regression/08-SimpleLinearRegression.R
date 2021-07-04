@@ -88,70 +88,64 @@ dwtest(myReg1, alternative="two.sided")
 # in-class exercise
 #####################
 
-d <- read.table("c4t6_2.csv", sep=',', header=T)
-head(d)  
-d$DPI  # data frame column selection
 
-dts <- ts(data= d, frequency = 4, start=c(2010, 1), end=c(2015, 4))
-head(dts)
-dts[,"DPI"] # time series column selection
+d <- read.table("c4t6.txt", header=T)
+head(d)
 
+dts <- ts(d, frequency=4, start=c(2010,1), end=c(2015,4))
+dts
 
-# Seasonally adjusted
-yJS <- ts(data=d$JS, frequency = 4, start=c(2010, 1), end=c(2015, 4))
-modDecomJS <- decompose(yJS, type="multiplicative")
-autoplot(modDecomJS)
-si <- tail(seasonal(modDecomJS),n=4) 
+autoplot(dts[,2:3])
+
+ggseasonplot(dts[,"JS"],year.labels = TRUE, year.labels.left = TRUE) 
+
+yJS <- ts(d$JS, frequency=4, start=c(2010,1), end=c(2015,4))
+
+#mdcJS <- decompose(yJS, type='multiplicative')
+#mdcJS <- decompose(yJS, type='additive')
+#mdcJS <- seas(yJS)
+mdcJS <- mstl(yJS)
+autoplot(mdcJS)
+
+# extract SI
+seasonal(mdcJS)
+si <- rep(tail(seasonal(mdcJS), n=4),1)
 si
-yJSSA <- seasadj(modDecomJS)
 
-
-dJSSA <- as.numeric(yJSSA)
-class(yJSSA)
-class(dJSSA)
-qplot(d$DPI, dJSSA, xlab="DPI", ylab="JS Seasonally Adjusted")
+# seasonally adjusted
+sa <- seasadj(mdcJS)
+qplot(d$DPI, as.numeric(sa), xlab='DPI', ylab='JS SS.Adjusted')
 
 
 # Simple regression
-yDPI <- ts(data=d$DPI, frequency = 4, start=c(2010, 1), end=c(2015, 4))
-myReg1 <- tslm(yJSSA~yDPI)
-summary(myReg1)
+X <- cbind(DPI=dts[,'DPI'],JSSA=sa)
+reg <- tslm(JSSA~DPI, data=X)
+summary(reg)
 
-dts2 <- cbind(DPI=dts[,"DPI"], JSSA=yJSSA)
-head(dts2)
-myReg2 <- tslm(JSSA~DPI, data=dts2)  # same thing as above
-summary(myReg2)  
-
+# plot
 autoplot(yJS, series="JS") +
-  autolayer(yJSSA, series ="JSSA") +
-  autolayer(fitted(myReg1), series="JSSA.Fitted") 
+  autolayer(sa, series ="JSSA") +
+  autolayer(fitted(reg), series="JSSA.Fitted") 
 
-dts3 <- cbind(T=dts[,"Time.period"], DPI=dts[,"DPI"])
-dts3
-myReg3 <- tslm(DPI~T, data=dts3)
-summary(myReg3)
+#===== Forecast DPI =====
+regDPI <- tslm(dts[,'DPI']~trend)
+summary(regDPI)
 
-# Forecasts for 2016Q1-Q4
-#DPIFC <- holt(yDPI, h=4)
-#mynewdata <- data.frame(yDPI=as.numeric(DPIFC$mean))
-#mynewdata
+newDPI <- forecast(regDPI, h=4)
 
-# Forecasts DPI using T for 2016Q1-Q4
-newT = data.frame(T=c(25,26,27,28))
-DPIFC = forecast(myReg3, newdata=newT)
-mynewdata <- data.frame(yDPI=as.numeric(DPIFC$mean))
-mynewdata
+autoplot(dts[,'DPI'], series='DPI') + 
+  autolayer(regDPI$fitted, series='DPI Fitted') +
+  autolayer(newDPI, series='DPI Predicted')
 
-yJSSAFC <- forecast(myReg1, newdata = mynewdata)
-yJSSAFC
+# predict
+newX <- data.frame(DPI=newDPI$mean)
+yJSSAFC <- forecast(reg, newdata=newX)
 
-siAllM <- rep(si, times=1)
-yJSFC <- yJSSAFC$mean*siAllM
-yJSFC
+yJSFC <- yJSSAFC$mean + si
 
-autoplot(yJS, series="JS") +
-  autolayer(yJSSA, series ="JSSA") +
-  autolayer(fitted(myReg1), series="JSSA.Fitted") +
+autoplot(dts[,'JS'], series="JS") +
+  autolayer(sa, series ="JS SA") +
+  autolayer(fitted(reg), series="JSSA.Fitted") +
   autolayer(yJSSAFC, series="JSSA.Forecast") +
   autolayer(yJSFC, series = "JS.Forecast")
 
@@ -160,7 +154,8 @@ autoplot(yJS, series="JS") +
 yJStest <- ts(c(6851, 7648, 6735, 11684), frequency = 4, start=c(2016,1))
 yJSFC
 mean(abs(yJSFC-yJStest)/yJStest)*100
+accuracy(yJSFC, yJStest)
 
 # residual analysis
-checkresiduals(myReg1)
+checkresiduals(reg)
 
