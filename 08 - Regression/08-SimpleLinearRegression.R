@@ -26,6 +26,7 @@ qplot(d$DPI, d$JS)
 # Seasonally adjusted
 yJS <- ts(data=d$JS, frequency = 4, start=c(2010, 1), end=c(2015, 4))
 modDecomJS <- decompose(yJS, type="multiplicative")
+modDecomJS
 autoplot(modDecomJS)
 si <- tail(seasonal(modDecomJS),n=4) 
 si
@@ -46,14 +47,13 @@ summary(myReg1)
 
 dts2 <- cbind(DPI=dts[,"DPI"], JSSA=yJSSA)
 head(dts2)
+str(dts2)
 myReg2 <- tslm(JSSA~DPI, data=dts2)  # same thing as above
 summary(myReg2)  
 
 autoplot(yJS, series="JS") +
   autolayer(yJSSA, series ="JSSA") +
   autolayer(fitted(myReg1), series="JSSA.Fitted") 
-
-
 
 # Forecasts for 2016Q1-Q4
 DPIFC <- holt(yDPI, h=4)
@@ -66,8 +66,6 @@ yJSSAFC
 siAllM <- rep(si, times=1)
 yJSFC <- yJSSAFC$mean*siAllM
 yJSFC
-
-
 
 autoplot(yJS, series="JS") +
   autolayer(yJSSA, series ="JSSA") +

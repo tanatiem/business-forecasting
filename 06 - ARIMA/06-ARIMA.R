@@ -93,6 +93,24 @@ sqrt(colMeans(multie2^2, na.rm=TRUE))
 multie3 <- tsCV(dts, forecastfunction = farima, h=8)
 sqrt(colMeans(multie3^2, na.rm=TRUE))
 
+errors <- data.frame(rbind(colMeans(multie1^2, na.rm=TRUE),
+      colMeans(multie2^2, na.rm=TRUE),
+      colMeans(multie3^2, na.rm=TRUE)),
+      row.names=c('Holt-Winters','ETS','ARIMA')
+)
+colnames(errors) <- 1:8
+
+library(reshape2)
+
+temp <- melt(as.matrix(errors))
+colnames(temp) <- c('model','h','MSE')
+ggplot(data=temp) +
+  geom_line(
+    mapping=aes(x=h, y=MSE, group=model, color=model)
+  ) + 
+  geom_point(
+    mapping=aes(x=h, y=MSE, group=model, color=model)
+  )
 ################################################
 # White Noise
 ################################################
@@ -119,7 +137,8 @@ ggAcf(y, plot=FALSE)
 ################################################
 # Non-seasonal ARIMA
 ################################################
-c7t2 <- read.table("c7t2.txt", header=TRUE)
+#c7t2 <- read.table("c7t2.txt", header=TRUE)
+c7t2 <- read.table('c7t2 NEW.csv', sep=',', header=TRUE)
 
 y3 <- ts(c7t2$AR1, freq=1)
 autoplot(y3)

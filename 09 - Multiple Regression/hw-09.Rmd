@@ -1,0 +1,69 @@
+---
+title: "Homework 9"
+output:
+  html_notebook: default
+  pdf_document: default
+---
+6210422036: Tanat Iempreedee  
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r echo=TRUE}
+library(ggplot2)
+library(fpp2)
+library(forecast)
+library(GGally)
+
+data <- read.table('c5p9.csv',sep=',',header=TRUE)
+data
+```
+
+## Correlations
+
+```{r}
+ggpairs(data, columns=2:4)
+```
+## Fit linear regression
+```{r}
+reg <- lm(AS~INC+POP, data=data)
+summary(reg)
+```
+### 1) Estimate values for $b_0, b_1, b_2$ for model
+
+- $\beta_0 = -307500$  
+- $\beta_1 = 14.56$  
+- $\beta_2 = 1397$  
+
+$AS = -307500 + 14.56(INC) + 1397(POP)$  
+
+
+### 2) Are the signs you find for the coefficients consistent with your expectations?
+Both coefficients for INC and POP are positive  
+- Area with higher income should have a higher sales  
+- Also, greater population should increase the sales
+
+### 3) Are the coefficients for the two explanatory variables significantly different from zero?
+
+- **INC**: $\beta_1$ is significantly different from zero but at significance level of 0.9  
+- **POP**: $\beta_2$ is significantly different from zero 
+
+### 4) What percentage of the variation in AS is explained by this model
+
+**R-squared = 0.9295**  
+
+This model can explain the variation in AS by 92.95%
+
+
+### 5) What point estimate of AS would you make for a city where INC=23175 and POP=128.07? Also find the 95% prediction interval
+```{r}
+newX <- data.frame(INC=23175, POP=128.07)
+forecast(reg, newdata = newX)
+```
+
+- Point estimate = 208,811.3
+- Prediction interval = [74308.43, 343314.2]
+
+
+
