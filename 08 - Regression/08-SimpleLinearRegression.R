@@ -176,6 +176,9 @@ salesfc
 
 
 # Point forecast = 141.4028 <-- mean -- sufficient stock at 50%
+# in-stock prob = 99% 
 qnorm(0.99, mean=salesfc$mean[1], sd=32.72)
-# stock level = 217.5209 at 99%
+# 217.5209 at 99%
+# target stock 218
+# safety stock = 76.12
 
