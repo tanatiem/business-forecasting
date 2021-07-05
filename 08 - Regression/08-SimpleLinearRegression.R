@@ -159,3 +159,23 @@ accuracy(yJSFC, yJStest)
 # residual analysis
 checkresiduals(reg)
 
+####################
+# Cross-sectional
+###################
+d2 <- read.table('area_sales.csv',sep=',',header=TRUE)
+colnames(d2) <- c('POP','SALES')
+
+reg2 <- lm(SALES~POP, data=d2)
+summary(reg2)
+
+# Residual standard error = 32.72
+
+newX <- data.frame(POP=155)
+salesfc <- forecast(reg2, newdata=newX)
+salesfc
+
+
+# Point forecast = 141.4028 <-- mean -- sufficient stock at 50%
+qnorm(0.99, mean=salesfc$mean[1], sd=32.72)
+# stock level = 217.5209 at 99%
+
