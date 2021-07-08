@@ -39,6 +39,18 @@ autoplot(dts[,"NCS"], series="Data") +
 
 checkresiduals(myReg)
 
+# coefficient t-statistics
+# DPIPC
+# t = 3.2275/0.3916
+pt(3.2275/0.3916,55) # left tail
+1-pt(3.2275/0.3916,55) # right tail
+2*(1-pt(3.2275/0.3916,55)) # two tail
+
+# PR
+t <- -3219.4991/1412.5314
+t
+2*(1-pt(abs(t),55))
+
 
 # Adj R squared
 ybar <- mean(d$NCS)
