@@ -92,6 +92,7 @@ snaive(dts[,"UR"], h=4)$mean
 snaive(dts[,"PR"], h=4)$mean
 snaive(dts[,"UMICS"], h=4)$mean
 
+fitted(myReg)
 myH <- 4
 myBaseline <- data.frame(DPIPC = snaive(dts[,"DPIPC"], h=myH)$mean,
                         UR = snaive(dts[,"UR"],h=myH)$mean,
@@ -112,7 +113,9 @@ autoplot(dts[,"NCS"], series="Data") +
   autolayer(fcast.newscenario, PI=FALSE, series="new scenario (optimistic)") +
   ylab("NCS")
 
-# prediction interval
+CV(myReg)
+
+x# prediction interval
 autoplot(fcast.baseline)
 fcast.baseline
 forecast(myReg, newdata = myBaseline, level=c(90, 95, 99))
