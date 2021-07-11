@@ -1,0 +1,444 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Homework 10},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifluatex
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\title{Homework 10}
+\author{}
+\date{\vspace{-2.5em}}
+
+\begin{document}
+\maketitle
+
+6210422036: Tanat Iempreedee
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(fpp2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Registered S3 method overwritten by 'quantmod':
+##   method            from
+##   as.zoo.data.frame zoo
+\end{verbatim}
+
+\begin{verbatim}
+## -- Attaching packages ---------------------------------------------- fpp2 2.4 --
+\end{verbatim}
+
+\begin{verbatim}
+## v ggplot2   3.3.4     v fma       2.4  
+## v forecast  8.15      v expsmooth 2.3
+\end{verbatim}
+
+\begin{verbatim}
+## 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(forecast)}
+
+\NormalTok{d }\OtherTok{\textless{}{-}} \FunctionTok{read.table}\NormalTok{(}\StringTok{\textquotesingle{}c3t13.txt\textquotesingle{}}\NormalTok{, }\AttributeTok{header=}\ConstantTok{TRUE}\NormalTok{,}
+                \AttributeTok{colClasses =} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}numeric\textquotesingle{}}\NormalTok{,}\StringTok{\textquotesingle{}factor\textquotesingle{}}\NormalTok{))}
+\FunctionTok{str}\NormalTok{(d)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 'data.frame':    27 obs. of  2 variables:
+##  $ Mustard: num  50137 76030 68590 80681 55228 ...
+##  $ Event  : Factor w/ 3 levels "1","2","3": 3 3 2 1 1 1 1 1 2 1 ...
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dts }\OtherTok{\textless{}{-}} \FunctionTok{ts}\NormalTok{(}\AttributeTok{data=}\NormalTok{d, }\AttributeTok{frequency=}\DecValTok{12}\NormalTok{, }\AttributeTok{start=}\FunctionTok{c}\NormalTok{(}\DecValTok{2015}\NormalTok{,}\DecValTok{4}\NormalTok{))}
+\FunctionTok{autoplot}\NormalTok{(dts[,}\StringTok{\textquotesingle{}Mustard\textquotesingle{}}\NormalTok{]) }\SpecialCharTok{+}
+  \FunctionTok{ylab}\NormalTok{(}\StringTok{\textquotesingle{}Sales\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{hw-10_files/figure-latex/unnamed-chunk-2-1.pdf}
+\#\#\#\# Prepare data to forecast
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{newdata }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{trend=}\DecValTok{28}\SpecialCharTok{:}\DecValTok{33}\NormalTok{, }
+                      \AttributeTok{season=}\FunctionTok{factor}\NormalTok{(}\DecValTok{7}\SpecialCharTok{:}\DecValTok{12}\NormalTok{, }\AttributeTok{levels=}\DecValTok{1}\SpecialCharTok{:}\DecValTok{12}\NormalTok{),}
+                      \AttributeTok{fevent=}\FunctionTok{factor}\NormalTok{(}\FunctionTok{rep}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{6}\NormalTok{), }\AttributeTok{levels=}\DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{))}
+\NormalTok{newdata}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   trend season fevent
+## 1    28      7      1
+## 2    29      8      1
+## 3    30      9      1
+## 4    31     10      1
+## 5    32     11      1
+## 6    33     12      1
+\end{verbatim}
+
+\hypertarget{model-1-mustard-trend}{%
+\subsection{Model 1: Mustard \textasciitilde{}
+trend}\label{model-1-mustard-trend}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Model 1}
+\NormalTok{reg1 }\OtherTok{\textless{}{-}} \FunctionTok{tslm}\NormalTok{(Mustard }\SpecialCharTok{\textasciitilde{}}\NormalTok{ trend, }\AttributeTok{data=}\NormalTok{dts)}
+\FunctionTok{summary}\NormalTok{(reg1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## tslm(formula = Mustard ~ trend, data = dts)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -15662  -8347  -4418   5591  23466 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  59219.8     4622.5  12.811 1.74e-12 ***
+## trend         -501.1      288.5  -1.737   0.0947 .  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 11680 on 25 degrees of freedom
+## Multiple R-squared:  0.1077, Adjusted R-squared:  0.07197 
+## F-statistic: 3.016 on 1 and 25 DF,  p-value: 0.09474
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fc }\OtherTok{\textless{}{-}} \FunctionTok{forecast}\NormalTok{(reg1, }\AttributeTok{newdata=}\NormalTok{newdata)}
+\FunctionTok{autoplot}\NormalTok{(dts[,}\StringTok{\textquotesingle{}Mustard\textquotesingle{}}\NormalTok{], }\AttributeTok{series=}\StringTok{\textquotesingle{}Data\textquotesingle{}}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{autolayer}\NormalTok{(}\FunctionTok{fitted}\NormalTok{(reg1), }\AttributeTok{series=}\StringTok{\textquotesingle{}Fitted\textquotesingle{}}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{autolayer}\NormalTok{(fc, }\AttributeTok{series=}\StringTok{\textquotesingle{}Forecast\textquotesingle{}}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ylab}\NormalTok{(}\StringTok{\textquotesingle{}Sales\textquotesingle{}}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ggtitle}\NormalTok{(}\StringTok{\textquotesingle{}Mustard \textasciitilde{} trend\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{hw-10_files/figure-latex/unnamed-chunk-4-1.pdf}
+
+\hypertarget{model-2-mustard-trend-season-event}{%
+\subsection{Model 2: Mustard \textasciitilde{} trend + season +
+Event}\label{model-2-mustard-trend-season-event}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Model 2}
+\NormalTok{fevent }\OtherTok{\textless{}{-}} \FunctionTok{factor}\NormalTok{(dts[,}\StringTok{\textquotesingle{}Event\textquotesingle{}}\NormalTok{], }\AttributeTok{levels=}\DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{)}
+
+\NormalTok{reg2 }\OtherTok{\textless{}{-}} \FunctionTok{tslm}\NormalTok{(Mustard }\SpecialCharTok{\textasciitilde{}}\NormalTok{ trend }\SpecialCharTok{+}\NormalTok{ season }\SpecialCharTok{+}\NormalTok{ fevent, }\AttributeTok{data=}\NormalTok{dts)}
+\FunctionTok{summary}\NormalTok{(reg2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## tslm(formula = Mustard ~ trend + season + fevent, data = dts)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+##  -4476  -1603      0   1603   4476 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  47731.7     2609.7  18.290 3.95e-10 ***
+## trend         -184.0       92.5  -1.989 0.069991 .  
+## season2      -5819.6     3041.2  -1.914 0.079822 .  
+## season3      -3118.9     3045.4  -1.024 0.325980    
+## season4     -15340.0     5272.4  -2.910 0.013093 *  
+## season5      10736.6     3062.2   3.506 0.004332 ** 
+## season6       3560.1     5952.3   0.598 0.560884    
+## season7      31083.2     3090.0  10.059 3.36e-07 ***
+## season8       6753.6     3074.8   2.196 0.048443 *  
+## season9       6275.0     3062.2   2.049 0.062966 .  
+## season10      -516.3     3052.4  -0.169 0.868491    
+## season11     -2882.4     3045.4  -0.946 0.362580    
+## season12    -19130.1     6080.3  -3.146 0.008434 ** 
+## fevent2      18898.4     5265.1   3.589 0.003718 ** 
+## fevent3      17929.5     4078.3   4.396 0.000871 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 3040 on 12 degrees of freedom
+## Multiple R-squared:  0.971,  Adjusted R-squared:  0.9371 
+## F-statistic: 28.67 on 14 and 12 DF,  p-value: 4.75e-07
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fc }\OtherTok{\textless{}{-}} \FunctionTok{forecast}\NormalTok{(reg2, }\AttributeTok{newdata=}\NormalTok{newdata)}
+\FunctionTok{autoplot}\NormalTok{(dts[,}\StringTok{\textquotesingle{}Mustard\textquotesingle{}}\NormalTok{], }\AttributeTok{series=}\StringTok{\textquotesingle{}Data\textquotesingle{}}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{autolayer}\NormalTok{(}\FunctionTok{fitted}\NormalTok{(reg2), }\AttributeTok{series=}\StringTok{\textquotesingle{}Fitted\textquotesingle{}}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{autolayer}\NormalTok{(fc, }\AttributeTok{series=}\StringTok{\textquotesingle{}Forecast\textquotesingle{}}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ylab}\NormalTok{(}\StringTok{\textquotesingle{}Sales\textquotesingle{}}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ggtitle}\NormalTok{(}\StringTok{\textquotesingle{}Mustard \textasciitilde{} trend + season + fevent\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{hw-10_files/figure-latex/unnamed-chunk-5-1.pdf} \#\#
+Model 3: Mustard \textasciitilde{} trend + season
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{reg3 }\OtherTok{\textless{}{-}} \FunctionTok{tslm}\NormalTok{(Mustard }\SpecialCharTok{\textasciitilde{}}\NormalTok{ trend }\SpecialCharTok{+}\NormalTok{ season, }\AttributeTok{data=}\NormalTok{dts)}
+\FunctionTok{summary}\NormalTok{(reg3)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## tslm(formula = Mustard ~ trend + season, data = dts)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -6130.2 -2054.7  -866.3  1466.9 10337.7 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  49885.4     3777.2  13.207 2.71e-09 ***
+## trend         -318.6      118.7  -2.683 0.017834 *  
+## season2      -5685.0     4618.5  -1.231 0.238628    
+## season3      -2849.7     4623.0  -0.616 0.547520    
+## season4       2831.6     4229.7   0.669 0.514100    
+## season5      16443.9     4221.3   3.895 0.001616 ** 
+## season6      22323.9     4216.3   5.295 0.000113 ***
+## season7      30275.5     4671.6   6.481 1.45e-05 ***
+## season8       6080.6     4654.9   1.306 0.212518    
+## season9       5736.5     4641.3   1.236 0.236804    
+## season10      -920.2     4630.7  -0.199 0.845345    
+## season11     -3151.6     4623.0  -0.682 0.506540    
+## season12      -366.3     4618.5  -0.079 0.937906    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 4617 on 14 degrees of freedom
+## Multiple R-squared:  0.9219, Adjusted R-squared:  0.8549 
+## F-statistic: 13.77 on 12 and 14 DF,  p-value: 9.874e-06
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fc }\OtherTok{\textless{}{-}} \FunctionTok{forecast}\NormalTok{(reg3, }\AttributeTok{newdata=}\NormalTok{newdata)}
+\FunctionTok{autoplot}\NormalTok{(dts[,}\StringTok{\textquotesingle{}Mustard\textquotesingle{}}\NormalTok{], }\AttributeTok{series=}\StringTok{\textquotesingle{}Data\textquotesingle{}}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{autolayer}\NormalTok{(}\FunctionTok{fitted}\NormalTok{(reg3), }\AttributeTok{series=}\StringTok{\textquotesingle{}Fitted\textquotesingle{}}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{autolayer}\NormalTok{(fc, }\AttributeTok{series=}\StringTok{\textquotesingle{}Forecast\textquotesingle{}}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{ylab}\NormalTok{(}\StringTok{\textquotesingle{}Sales\textquotesingle{}}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ggtitle}\NormalTok{(}\StringTok{\textquotesingle{}Mustard \textasciitilde{} trend + season\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{hw-10_files/figure-latex/unnamed-chunk-6-1.pdf}
+
+\hypertarget{model-4-mustard-trend-event}{%
+\subsection{Model 4: Mustard \textasciitilde{} trend +
+Event}\label{model-4-mustard-trend-event}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{reg4 }\OtherTok{\textless{}{-}} \FunctionTok{tslm}\NormalTok{(Mustard }\SpecialCharTok{\textasciitilde{}}\NormalTok{ trend }\SpecialCharTok{+}\NormalTok{ fevent, }\AttributeTok{data=}\NormalTok{dts)}
+\FunctionTok{summary}\NormalTok{(reg4)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## tslm(formula = Mustard ~ trend + fevent, data = dts)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -13310  -8766  -2542   7319  26219 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  56237.2     5494.6  10.235 4.92e-10 ***
+## trend         -443.8      326.4  -1.360    0.187    
+## fevent2       6264.5     5242.8   1.195    0.244    
+## fevent3       7512.1     9714.4   0.773    0.447    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 11710 on 23 degrees of freedom
+## Multiple R-squared:  0.1741, Adjusted R-squared:  0.06637 
+## F-statistic: 1.616 on 3 and 23 DF,  p-value: 0.213
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fc }\OtherTok{\textless{}{-}} \FunctionTok{forecast}\NormalTok{(reg4, }\AttributeTok{newdata=}\NormalTok{newdata)}
+\FunctionTok{autoplot}\NormalTok{(dts[,}\StringTok{\textquotesingle{}Mustard\textquotesingle{}}\NormalTok{], }\AttributeTok{series=}\StringTok{\textquotesingle{}Data\textquotesingle{}}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{autolayer}\NormalTok{(}\FunctionTok{fitted}\NormalTok{(reg4), }\AttributeTok{series=}\StringTok{\textquotesingle{}Fitted\textquotesingle{}}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{autolayer}\NormalTok{(fc, }\AttributeTok{series=}\StringTok{\textquotesingle{}Forecast\textquotesingle{}}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ylab}\NormalTok{(}\StringTok{\textquotesingle{}Sales\textquotesingle{}}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{ggtitle}\NormalTok{(}\StringTok{\textquotesingle{}Mustard \textasciitilde{} trend + fevent\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{hw-10_files/figure-latex/unnamed-chunk-7-1.pdf} \#\#
+Compare AIC Based on the AIC, Model 2 is selected.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{data.frame}\NormalTok{(}\AttributeTok{MD1=}\FunctionTok{AIC}\NormalTok{(reg1),}\AttributeTok{MD2=}\FunctionTok{AIC}\NormalTok{(reg2),}\AttributeTok{MD3=}\FunctionTok{AIC}\NormalTok{(reg3),}\AttributeTok{MD4=}\FunctionTok{AIC}\NormalTok{(reg4))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        MD1      MD2      MD3      MD4
+## 1 586.2768 519.7829 542.5138 588.1878
+\end{verbatim}
+
+\hypertarget{forecast}{%
+\subsection{Forecast}\label{forecast}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fc }\OtherTok{\textless{}{-}} \FunctionTok{forecast}\NormalTok{(reg2, }\AttributeTok{newdata=}\NormalTok{newdata)}
+\NormalTok{fc}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##          Point Forecast    Lo 80    Hi 80     Lo 95    Hi 95
+## Jul 2017       73663.48 68132.42 79194.55 64777.626 82549.34
+## Aug 2017       49149.93 43618.86 54681.00 40264.071 58035.79
+## Sep 2017       48487.30 42956.24 54018.37 39601.446 57373.16
+## Oct 2017       41512.02 35980.95 47043.09 32626.161 50397.88
+## Nov 2017       38962.00 33430.93 44493.07 30076.141 47847.86
+## Dec 2017       22530.34 13498.15 31562.54  8019.798 37040.89
+\end{verbatim}
+
+\hypertarget{question}{%
+\subsection{Question}\label{question}}
+
+If we want to optimize the campaign spending, what are other possible
+independent variables? Indicate whether they are numerical or
+categorical.
+
+\begin{itemize}
+\tightlist
+\item
+  Campaign Spending (numerical) plan for each month
+\item
+  A flag indicate Campaign sensitivity (categorical)?
+\item
+  If \(Profit = Sales - Qty(UnitCost) - CampaignSpending - ...\), Unit
+  cost could affect finding an optimum campaign spending as well, we may
+  want to use costs as well, e.g., estimated raw material cost
+  (numerical) for each month?
+\end{itemize}
+
+\end{document}
