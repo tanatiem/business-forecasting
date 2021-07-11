@@ -28,6 +28,7 @@ str(da)
 da <- da %>% mutate(advCb = advert^3 )  # same thing using pipe %>% 
 str(da)
 
+da
 # linear model
 mod1 <- lm(sales ~ advert, data=da)
 mod1
