@@ -115,7 +115,10 @@ anova(mSB2)
 anova(mBS1)
 
 
+regbs <- lm(Salary ~ YrsExper + Gender + JobGrade + PCJob, data=dbs)
+summary(regbs)
 
+CV(regbs)
 #################################
 # full rank assumption
 ################################# 

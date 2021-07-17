@@ -17,7 +17,7 @@ setwd("C:/Users/Admin/Google Drive/Mai/Teaching/Courses/LM7204-BizForecasting/Ex
 ######################
 da <- read.table("Advert.txt", header=TRUE)
 str(da)
-qqplot(da$advert, da$sales, xlab="Advertising", ylab="Sales")
+qplot(da$advert, da$sales, xlab="Advertising", ylab="Sales")
 
 da <- mutate(da, advSq=advert^2)  # add new variables into data frame
 str(da)
