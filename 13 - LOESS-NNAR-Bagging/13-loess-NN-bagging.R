@@ -59,6 +59,7 @@ legend("bottomright", legend=c("s=0.75", "s=0.30", "s=0.43"), lty = rep(1,3),
 # STL (Revisit)
 
 d <- read.table("c6p14.txt", header=TRUE)
+d <- read.table("c6p14.csv", header=TRUE, sep=",")
 head(d)
 
 d$index <- 1:length(d$CS)  # create index variable
@@ -117,4 +118,20 @@ autoplot(y) +
   autolayer(baggedsnfc, series="Bagged Seasonal Naive", PI=FALSE)
 
 
+nnarfc <- y %>% nnetar(y, lambda=0) %>% forecast(h=8)
+baggedsnfc <- baggedModel(y, bootstrapped_series=bld.mbb.bootstrap(y, 200), fn=snaive) %>% forecast(h=8)
 
+
+nnarfc <- forecast(nnetar(y, lambda=0), h=8)
+baggednnarfc <- baggedModel(y, bootstrapped_series=bld.mbb.bootstrap(y, 200), 
+                            fn=nnetar, lambda=0) %>% forecast(h=8)
+autoplot(y) +
+  autolayer(nnarfc, series="NNETAR", PI=FALSE) +
+  autolayer(baggednnarfc, series="Bagged NNETAR", PI=FALSE)
+
+nnarfc <- forecast(nnetar(y), h=8)
+baggednnarfc <- baggedModel(y, bootstrapped_series=bld.mbb.bootstrap(y, 200), 
+                            fn=nnetar) %>% forecast(h=8)
+autoplot(y) +
+  autolayer(nnarfc, series="NNETAR", PI=FALSE) +
+  autolayer(baggednnarfc, series="Bagged NNETAR", PI=FALSE)
