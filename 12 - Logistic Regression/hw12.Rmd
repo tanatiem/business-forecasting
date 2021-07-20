@@ -1,0 +1,74 @@
+---
+title: "Homework 12"
+output: html_notebook
+---
+6210422036: Tanat Iempreedee  
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(caret)
+library(e1071)
+library(reshape2)
+
+d <- read.table('shipment.csv', sep=',', header=TRUE,
+                colClasses=c('factor','numeric','numeric','factor'))
+str(d)
+```
+## 1) EDA
+
+Among all late shipments, the average distance and weight are higher than on-time shipments.
+```{r}
+d %>% group_by(Late) %>%
+  summarise(AvgDistance=mean(Distance), AvgWeight=mean(Weight), n=n())
+```
+
+```{r}
+# EDA
+ggplot(d, aes(Distance, Weight)) +
+  geom_point(aes(color=Late)) +
+  facet_wrap(~LSPRank) +
+  scale_color_brewer(palette="Set2")
+```
+```{r}
+# count plot
+ggplot(d, aes(fill=Late, x=LSPRank)) + 
+  geom_bar(position="dodge") +
+  scale_fill_brewer(palette="Set2")
+```
+```{r}
+# normalized count plot
+d %>% group_by(LSPRank) %>% 
+  summarise(Late.N=mean(Late=='0'),Late.Y=mean(Late=='1')) %>%
+  melt(variable.name='Late.p') %>%
+  ggplot(aes(x=LSPRank, y=value, fill=Late.p)) +
+    geom_bar(position='stack', stat='identity') +
+    ylab('Late Proportion') +
+    scale_fill_brewer(palette="Set2")
+```
+## 2) Fit Logistic Regression
+```{r}
+logreg <- glm(Late~Distance + Weight + LSPRank, data=d, family="binomial")
+summary(logreg)
+```
+### Coefficient interpretation
+- Increases in **Distance** and **Weight** raises the probability of being late. and Weight has a higher effect. -> make sense
+- **LSPRank** of 2,3,4 has less probability of being Late compared to LSPRank 1. The higher ranks of LSPRank decreases more probability of being late. This seems to make sense if higher rank means higher quality of a service provider.  
+
+
+## 3) Predict
+```{r}
+newdata <- data.frame(Distance=680,Weight=3.7,LSPRank=factor(2, levels=1:4))
+newdata
+```
+
+```{r}
+y_pred <- predict(logreg, newdata=newdata ,type='response')
+y_pred
+ifelse(y_pred >= 0.5, 'Late', 'Not Late')
+```
+

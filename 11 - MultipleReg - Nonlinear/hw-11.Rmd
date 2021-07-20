@@ -87,3 +87,6 @@ rbind(LOGLOG=CV(reg1), QUADRATIC=CV(reg2))
 #### Interpretation
 Choose **Log-log** model which gives the lower AIC, even though Quadratic gives the better Adjusted R Squared.  
 From the problem context, increasing advertisement expenditure should not decrease Sales. Instead, the growth of Sales could saturate at some point which aligns more with logarithmic trend.
+
+#### Solution
+We can't use CV and AIC/AICc/BIC which base on MLE to compare log-log and quadratic. Since it's log(y) vs y. We choose the right model from AdjR2.

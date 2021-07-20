@@ -7,7 +7,7 @@ library(caret)
 library(e1071)
 
 
-setwd("C:/Users/Admin/Google Drive/Mai/Teaching/Courses/LM7204-BizForecasting/Excel-R")
+#setwd("C:/Users/Admin/Google Drive/Mai/Teaching/Courses/LM7204-BizForecasting/Excel-R")
 
 # incorrect data type
 d <- read.table("bidding.txt", header=TRUE)
@@ -44,7 +44,13 @@ summary(myLogit1)
 predict(myLogit1, newdata = data.frame(Price=57), type="response")
 1/(1+exp(-sum(myLogit1$coefficients*c(1,57))))
 
+predict(myLogit1, newdata = data.frame(Price=48), type="response")
+1/(1+exp(-sum(myLogit1$coefficients*c(1,48))))
 
+pW <- predict(myLogit1, newdata=data.frame(Price=c(48)), type="response")
+pL <- 1-pW
+odds <- pW/pL
+odds
 
 
 # interpreting coefficient
@@ -58,11 +64,12 @@ logOdds[2] - logOdds[1]
 
 odds[2]
 odds[1]*exp(-0.1563404)
-
+# e^(c*beta)
 
 # classification
 priceAmt <- data.frame(Price=c(40, 50, 60, 70))
 pHat <- predict(myLogit1, newdata = priceAmt, type="response")
+pHat
 ifelse(pHat >= 0.5, "Win", "Lose")
 
 # logistic regression with two features (price + day)
@@ -89,7 +96,7 @@ pred <- ifelse(preMod1 >= 0.5, "1", "0")
 mean(pred == d$BiddingResult) # accuracy
 
 tb1 <- table(pred, actual=d$BiddingResult)
-
+tb1
 confusionMatrix(tb1)
 
 
