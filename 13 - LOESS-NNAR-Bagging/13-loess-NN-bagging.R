@@ -17,17 +17,38 @@ setwd("C:/Users/Admin/Google Drive/Mai/Teaching/Courses/LM7204-BizForecasting/Ex
 # Example: Advertising vs Sales (Revisit)
 da <- read.table("Advert.txt", header=TRUE)
 plot(da$advert, da$sales, xlab="Advertising", ylab="Sales")
+qplot(da$advert, da$sales, xlab="Advertising", ylab="Sales")
+ggplot(da, aes(advert,sales)) + geom_point() + xlab('Advertising') + ylab('Sales')
 
 saleLo75 <- loess(da$sales ~ da$advert) # default span 0.75, degree=2
 smooth75 <- predict(saleLo75)  # obtain smoothed values 
+smooth75
 
 plot(da$sales, x=da$advert, type="p", xlab="Advertising", ylab="Sales")
 lines(smooth75, x=da$advert, col="blue") 
+
+ggplot(da, aes(x=advert,y=sales)) + geom_point() +
+  geom_line(mapping=aes(y=smooth75, color='s = 0.75')) + 
+  scale_color_manual(name='LOESS', values=c('s = 0.75'='blue'))
 
 smooth30 <- loess(da$sales ~ da$advert, span = 0.3) %>% predict()
 plot(da$sales, x=da$advert, type="p", xlab="Advertising", ylab="Sales")
 lines(smooth75, x=da$advert, col="blue") 
 lines(smooth30, x=da$advert, col="red")
+
+ggplot(da, aes(x=advert,y=sales)) + geom_point() +
+  geom_line(mapping=aes(y=smooth75, color='s = 0.75')) +
+  geom_line(mapping=aes(y=smooth30, color='s = 0.30')) + 
+  scale_color_manual(name='LOESS', values=c(
+    's = 0.75'='blue',
+    's = 0.30'='red'))
+
+
+help("loess")
+mysmooth <- loess(sales ~ advert, data=da, span=.3, degree=3) %>% predict()
+plot(da$sales, x=da$advert, type='p', xlab='Advertising', ylab='Sales')
+lines(mysmooth, x=da$advert, col='green')
+
 
 # selecting span
 # http://users.stat.umn.edu/~helwig/notes/smooth-notes.html#local-regression
@@ -55,10 +76,18 @@ lines(smooth43, x=da$advert, col="green")
 legend("bottomright", legend=c("s=0.75", "s=0.30", "s=0.43"), lty = rep(1,3),
        col=c("blue", "red", "green"))
 
+ggplot(da, aes(x=advert,y=sales)) + geom_point() +
+  geom_line(mapping=aes(y=smooth75, color='s = 0.75')) +
+  geom_line(mapping=aes(y=smooth30, color='s = 0.30')) +
+  geom_line(mapping=aes(y=smooth43, color='s = 0.43')) + 
+  scale_color_manual(name='LOESS', values=c(
+    's = 0.75'='blue',
+    's = 0.30'='red',
+    's = 0.43'='green'))
 
 # STL (Revisit)
 
-d <- read.table("c6p14.txt", header=TRUE)
+#d <- read.table("c6p14.txt", header=TRUE)
 d <- read.table("c6p14.csv", header=TRUE, sep=",")
 head(d)
 
@@ -97,12 +126,21 @@ fitNN2 <- nnetar(y, lambda=0)
 fitNN2    
 forecast(fitNN2, h=8)
 
+d <- read.table('c7Gap.csv', sep=',', header=TRUE)
+dts <- ts(d$GapSales, start=c(2006,2), frequency=4)
+dts
+fitNN3 <- nnetar(dts, lambda=0) # boxcox transformation with lambda=0 to ensure forecast stay positive
+fitNN3
 
 ##############################################
 # Bagging
 ##############################################
 etsfc <- y %>% ets() %>% forecast(h=8)
+autoplot(etsfc)
+
 baggedfc <- y %>% baggedETS() %>% forecast(h=8)
+autoplot(baggedfc)
+
 etsfc$mean
 baggedfc$mean
 autoplot(y) +
@@ -111,20 +149,24 @@ autoplot(y) +
 
 help("baggedETS")
 snaivefc <- y %>%  snaive(h=8)
+autoplot(snaivefc)
+
 baggedsnfc <- baggedModel(y, bootstrapped_series=bld.mbb.bootstrap(y, 200), fn=snaive) %>% forecast(h=8)
+autoplot(baggedsnfc)
 
 autoplot(y) +
   autolayer(snaivefc, series="Seasonal naive", PI=FALSE) +
   autolayer(baggedsnfc, series="Bagged Seasonal Naive", PI=FALSE)
 
 
-nnarfc <- y %>% nnetar(y, lambda=0) %>% forecast(h=8)
-baggedsnfc <- baggedModel(y, bootstrapped_series=bld.mbb.bootstrap(y, 200), fn=snaive) %>% forecast(h=8)
 
 
 nnarfc <- forecast(nnetar(y, lambda=0), h=8)
 baggednnarfc <- baggedModel(y, bootstrapped_series=bld.mbb.bootstrap(y, 200), 
                             fn=nnetar, lambda=0) %>% forecast(h=8)
+autoplot(nnarfc)
+autoplot(baggednnarfc)
+
 autoplot(y) +
   autolayer(nnarfc, series="NNETAR", PI=FALSE) +
   autolayer(baggednnarfc, series="Bagged NNETAR", PI=FALSE)
@@ -132,6 +174,9 @@ autoplot(y) +
 nnarfc <- forecast(nnetar(y), h=8)
 baggednnarfc <- baggedModel(y, bootstrapped_series=bld.mbb.bootstrap(y, 200), 
                             fn=nnetar) %>% forecast(h=8)
+nnarfc
+baggednnarfc
+
 autoplot(y) +
   autolayer(nnarfc, series="NNETAR", PI=FALSE) +
   autolayer(baggednnarfc, series="Bagged NNETAR", PI=FALSE)
