@@ -93,6 +93,7 @@ snaive(dts[,"PR"], h=4)$mean
 snaive(dts[,"UMICS"], h=4)$mean
 
 fitted(myReg)
+
 myH <- 4
 myBaseline <- data.frame(DPIPC = snaive(dts[,"DPIPC"], h=myH)$mean,
                         UR = snaive(dts[,"UR"],h=myH)$mean,

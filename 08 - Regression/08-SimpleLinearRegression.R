@@ -76,7 +76,8 @@ autoplot(yJS, series="JS") +
 # evalute forecast accuracy on holdout sample
 yJStest <- ts(c(6851, 7648, 6735, 11684), frequency = 4, start=c(2016,1))
 yJSFC
-mean(abs(yJSFC-yJStest)/yJStest)*100
+mean(abs(yJSFC-yJStest)/yJStest)*100  # MAPE
+accuracy(yJSFC, yJStest)
 
 # residual analysis
 checkresiduals(myReg1)
@@ -137,7 +138,7 @@ autoplot(dts[,'DPI'], series='DPI') +
   autolayer(regDPI$fitted, series='DPI Fitted') +
   autolayer(newDPI, series='DPI Predicted')
 
-# predict
+# forecast
 newX <- data.frame(DPI=newDPI$mean)
 yJSSAFC <- forecast(reg, newdata=newX)
 
@@ -177,6 +178,7 @@ salesfc
 
 # Point forecast = 141.4028 <-- mean -- sufficient stock at 50%
 # in-stock prob = 99% 
+# sd = stndard error of regression
 qnorm(0.99, mean=salesfc$mean[1], sd=32.72)
 # 217.5209 at 99%
 # target stock 218

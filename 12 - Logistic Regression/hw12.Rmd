@@ -56,8 +56,8 @@ logreg <- glm(Late~Distance + Weight + LSPRank, data=d, family="binomial")
 summary(logreg)
 ```
 ### Coefficient interpretation
-- Increases in **Distance** and **Weight** raises the probability of being late. and Weight has a higher effect. -> make sense
-- **LSPRank** of 2,3,4 has less probability of being Late compared to LSPRank 1. The higher ranks of LSPRank decreases more probability of being late. This seems to make sense if higher rank means higher quality of a service provider.  
+- Increases in **Distance** and **Weight** raises the odds of being late. and Weight has a higher effect. -> make sense
+- **LSPRank** of 2,3,4 has less probability of being Late compared to LSPRank 1. The higher ranks of LSPRank decreases the  odds of being late. This seems to make sense if higher rank means higher quality of a service provider.  
 
 
 ## 3) Predict

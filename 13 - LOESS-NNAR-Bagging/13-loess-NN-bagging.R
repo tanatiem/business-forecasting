@@ -45,9 +45,6 @@ ggplot(da, aes(x=advert,y=sales)) + geom_point() +
 
 
 help("loess")
-mysmooth <- loess(sales ~ advert, data=da, span=.3, degree=3) %>% predict()
-plot(da$sales, x=da$advert, type='p', xlab='Advertising', ylab='Sales')
-lines(mysmooth, x=da$advert, col='green')
 
 
 # selecting span
@@ -129,8 +126,12 @@ forecast(fitNN2, h=8)
 d <- read.table('c7Gap.csv', sep=',', header=TRUE)
 dts <- ts(d$GapSales, start=c(2006,2), frequency=4)
 dts
-fitNN3 <- nnetar(dts, lambda=0) # boxcox transformation with lambda=0 to ensure forecast stay positive
-fitNN3
+fitNN <- nnetar(dts, lambda=0) # boxcox transformation with lambda=0 to ensure forecast stay positive
+fitNN
+
+fNN <- forecast(fitNN, PI=TRUE, level=c(.95,.99), h=7)
+fNN
+autoplot(fNN)
 
 ##############################################
 # Bagging
