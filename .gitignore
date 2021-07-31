@@ -43,3 +43,6 @@ vignettes/*.pdf
 
 # temp files
 **/~*
+
+/final/*.pdf
+/midterm/*.pdf
