@@ -174,7 +174,7 @@ summary(reg2)
 newX <- data.frame(POP=155)
 salesfc <- forecast(reg2, newdata=newX)
 salesfc
-
+checkresiduals(salesfc)
 
 # Point forecast = 141.4028 <-- mean -- sufficient stock at 50%
 # in-stock prob = 99% 
